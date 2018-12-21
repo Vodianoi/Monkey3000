@@ -6,6 +6,7 @@ const models = require('./models/index');
 // Decode json and x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+const pug = require('pug');
 
 // Add a bit of logging
 app.use(morgan('short'));
@@ -14,12 +15,14 @@ app.use(morgan('short'));
 //     res.send('Hello World');
 // });
 
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
 // Get all the users defined
 app.get('/', function (req, res) {
     models.User.findAll()
         .then((users) => {
-            res.json(users)
-            res.render("views/Creationsinge.pug")
+            //res.json(users)
+            res.render("Creationsinge")
         })
 });
 
@@ -159,7 +162,7 @@ models.sequelize.sync().then(function () {
      *
      * Listen only when database connection is sucessfull
      */
-    app.listen(process.env.PORT || 3000, function () {
+    app.listen(process.env.PORT, function () {
         console.log('Express server listening on port ' + process.env.PORT);
     });
 });
