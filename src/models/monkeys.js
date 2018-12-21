@@ -1,12 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('Monkey', {
+    var Monkey =  sequelize.define('Monkey', {
         name: DataTypes.STRING,
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true
-        },
-
-        taille: DataTypes.INTEGER
+        taille: DataTypes.INTEGER,
+        enclos: DataTypes.INTEGER
     });
+
+    // Monkey.associate = function (models) {
+    //     models.Monkey.belongsTo(models.Enclos, {
+    //         onDelete: "CASCADE",
+    //         foreignKey: {
+    //             allowNull: false
+    //         }
+    //     });
+    // };
+
+    // module.exports.getMonkeyById = function(id, callback){
+    //     Monkey.findById(id, callback);
+    // };
+
+    return Monkey;
+
 
 };

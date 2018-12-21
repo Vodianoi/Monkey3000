@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const app = express()
+const app = express();
 const models = require('./models/index');
 // Decode json and x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}))
@@ -20,61 +20,134 @@ app.get('/', function (req, res) {
         .then((users) => {
             res.json(users)
         })
-});
+})
 
 // Add a new user to the database
-app.post('/', function (req, res) {
+app.post('/', function(req, res) {
     models.User.create({
         username: req.body.username
     })
         .then(() => {
             res.send('User added !')
         })
-});
+})
 
-
-// Get all the gremlins defined
-app.get('/monkeys', function (req, res) {
-    models.Gremlin.findAll()
-        .then((gremlins) => {
-            res.json(gremlins)
+app.get('/monkeys', function(req, res) {
+    models.Monkey.findAll()
+        .then((monkeys) => {
+            res.json(monkeys)
         })
-});
+        .catch((err) => {
+            res.json(err)
+        })
+})
 
-
-// Add a new gremlin to the database
-app.post('/monkey/:id', function (req, res) {
-    models.Gremlin.create({
-        name: req.name,
-        taille: 10,
-        id: req.id
+app.post('/monkeys', function(req, res) {
+    models.Monkey.create({
+        name: req.body.name,
+        taille: req.body.taille,
+        enclos: req.body.enclos
     })
-        .then(() => {
-            res.send('Monkey added !')
+        .then((monkey) => {
+            res.json(monkey);
         })
-});
+        .catch((err) => {
+            res.json(err)
+        })
+})
 
+app.put('/monkeys', function(req, res) {
+    const promises = [];
 
-app.param(['name'], (req, res, next, name) => {
-    req.name = name;
-    next();
-});
+    req.body.mutations
+        .forEach((item) => {
 
-app.param(['id'], (req, res, next, id) => {
-    req.id = id;
-    next();
-});
+            promises.push(
+                models.Monkey.update(
+                    item.data,
+                    {
+                        where: {
+                            id: item.id
+                        }
+                    }
+                )
+            )
 
+        })
 
+    Promise.all(promises)
+        .then((response) => {
+            res.json(response);
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+})
+
+app.delete('/monkeys', function(req, res) {
+    models.Monkey.destroy({
+        where: {
+            id: req.body.ids
+        }
+    })
+        .then((response) => {
+            res.json(response)
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+})
+
+app.get('/monkeys/:id', function(req, res) {
+    models.Monkey.findOne({
+        id: req.params.id
+    })
+        .then((monkey) => {
+            res.json(monkey)
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+})
+
+app.put('/monkeys/:id', function(req, res) {
+    models.Monkey.update(
+        req.body,
+        {
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((monkey) => {
+            res.json(monkey)
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+})
+
+app.delete('/monkeys/:id', function(req, res) {
+    models.Monkey.destroy({
+        where: {
+            id: req.params.id
+        }
+    })
+        .then((response) => {
+            res.json(response);
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+})
 
 // Synchronize models
-models.sequelize.sync().then(function () {
+models.sequelize.sync().then(function() {
     /**
      * Listen on provided port, on all network interfaces.
      *
      * Listen only when database connection is sucessfull
      */
-    app.listen(process.env.PORT, function () {
-        console.log('Express server listening on port ' + process.env.PORT);
+    app.listen(3000, function() {
+        console.log('Express server listening on port 3000');
     });
 });
