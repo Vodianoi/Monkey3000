@@ -25,13 +25,13 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-// sequelize
-//     .sync({ force: true })
-//     .then(function(err) {
-//         console.log('It worked!');
-//     }, function (err) {
-//         console.log('An error occurred while creating the table:', err);
-//     });
+sequelize
+    .sync({ force: true })
+    .then(function(err) {
+        console.log('It worked!');
+    }, function (err) {
+        console.log('An error occurred while creating the table:', err);
+    });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

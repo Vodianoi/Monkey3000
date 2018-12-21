@@ -19,11 +19,12 @@ app.get('/', function (req, res) {
     models.User.findAll()
         .then((users) => {
             res.json(users)
+            res.render("views/Creationsinge.pug")
         })
 });
 
 // Add a new user to the database
-app.post('/', function(req, res) {
+app.post('/', function (req, res) {
     models.User.create({
         username: req.body.username
     })
@@ -32,7 +33,7 @@ app.post('/', function(req, res) {
         })
 });
 
-app.get('/monkeys', function(req, res) {
+app.get('/monkeys', function (req, res) {
     models.Monkey.findAll()
         .then((monkeys) => {
             res.json(monkeys)
@@ -42,7 +43,7 @@ app.get('/monkeys', function(req, res) {
         })
 });
 
-app.post('/monkeys', function(req, res) {
+app.post('/monkeys', function (req, res) {
     models.Monkey.create({
         name: req.body.name,
         taille: req.body.taille,
@@ -56,7 +57,7 @@ app.post('/monkeys', function(req, res) {
         })
 });
 
-app.put('/monkeys', function(req, res) {
+app.put('/monkeys', function (req, res) {
     const promises = [];
 
     req.body.mutations
@@ -84,7 +85,7 @@ app.put('/monkeys', function(req, res) {
         })
 });
 
-app.delete('/monkeys', function(req, res) {
+app.delete('/monkeys', function (req, res) {
     models.Monkey.destroy({
         where: {
             id: req.body.ids
@@ -98,7 +99,7 @@ app.delete('/monkeys', function(req, res) {
         })
 });
 
-app.get('/monkeys/:id', function(req, res) {
+app.get('/monkeys/:id', function (req, res) {
     models.Monkey.findOne({
         id: req.params.id
     })
@@ -110,7 +111,7 @@ app.get('/monkeys/:id', function(req, res) {
         })
 });
 
-app.put('/monkeys/:id', function(req, res) {
+app.put('/monkeys/:id', function (req, res) {
     models.Monkey.update(
         req.body,
         {
@@ -126,7 +127,7 @@ app.put('/monkeys/:id', function(req, res) {
         })
 });
 
-app.delete('/monkeys/:id', function(req, res) {
+app.delete('/monkeys/:id', function (req, res) {
     models.Monkey.destroy({
         where: {
             id: req.params.id
@@ -141,7 +142,6 @@ app.delete('/monkeys/:id', function(req, res) {
 });
 
 
-
 app.param(['name'], (req, res, next, name) => {
     req.name = name;
     next();
@@ -153,13 +153,13 @@ app.param(['id'], (req, res, next, id) => {
 });
 
 // Synchronize models
-models.sequelize.sync().then(function() {
+models.sequelize.sync().then(function () {
     /**
      * Listen on provided port, on all network interfaces.
      *
      * Listen only when database connection is sucessfull
      */
-    app.listen(process.env.PORT, function() {
+    app.listen(process.env.PORT || 3000, function () {
         console.log('Express server listening on port ' + process.env.PORT);
     });
 });
