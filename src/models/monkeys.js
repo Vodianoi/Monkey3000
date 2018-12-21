@@ -5,18 +5,18 @@ module.exports = (sequelize, DataTypes) => {
         enclos: DataTypes.INTEGER
     });
 
-    // Monkey.associate = function (models) {
-    //     models.Monkey.belongsTo(models.Enclos, {
-    //         onDelete: "CASCADE",
-    //         foreignKey: {
-    //             allowNull: false
-    //         }
-    //     });
-    // };
+    Monkey.associate = function (models) {
+        models.Monkey.belongsTo(models.Enclos, {
+            onDelete: "CASCADE",
+            foreignKey: {
+                allowNull: false
+            }
+        });
+    };
 
-    // module.exports.getMonkeyById = function(id, callback){
-    //     Monkey.findById(id, callback);
-    // };
+    module.exports.getMonkeyById = function(id, callback){
+        Monkey.findById(id, callback);
+    };
 
     return Monkey;
 

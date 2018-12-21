@@ -1,10 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     var Enclos =  sequelize.define('Enclos', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
+        name: DataTypes.STRING
     });
 
     Enclos.associate = function(models) {
