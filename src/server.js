@@ -1,11 +1,11 @@
-const express = require('express')
+const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
 const models = require('./models/index');
 // Decode json and x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // Add a bit of logging
 app.use(morgan('short'));
@@ -20,7 +20,7 @@ app.get('/', function (req, res) {
         .then((users) => {
             res.json(users)
         })
-})
+});
 
 // Add a new user to the database
 app.post('/', function(req, res) {
@@ -30,7 +30,7 @@ app.post('/', function(req, res) {
         .then(() => {
             res.send('User added !')
         })
-})
+});
 
 app.get('/monkeys', function(req, res) {
     models.Monkey.findAll()
@@ -40,7 +40,7 @@ app.get('/monkeys', function(req, res) {
         .catch((err) => {
             res.json(err)
         })
-})
+});
 
 app.post('/monkeys', function(req, res) {
     models.Monkey.create({
@@ -54,7 +54,7 @@ app.post('/monkeys', function(req, res) {
         .catch((err) => {
             res.json(err)
         })
-})
+});
 
 app.put('/monkeys', function(req, res) {
     const promises = [];
@@ -73,7 +73,7 @@ app.put('/monkeys', function(req, res) {
                 )
             )
 
-        })
+        });
 
     Promise.all(promises)
         .then((response) => {
@@ -82,7 +82,7 @@ app.put('/monkeys', function(req, res) {
         .catch((err) => {
             res.json(err)
         })
-})
+});
 
 app.delete('/monkeys', function(req, res) {
     models.Monkey.destroy({
@@ -96,7 +96,7 @@ app.delete('/monkeys', function(req, res) {
         .catch((err) => {
             res.json(err)
         })
-})
+});
 
 app.get('/monkeys/:id', function(req, res) {
     models.Monkey.findOne({
@@ -108,7 +108,7 @@ app.get('/monkeys/:id', function(req, res) {
         .catch((err) => {
             res.json(err)
         })
-})
+});
 
 app.put('/monkeys/:id', function(req, res) {
     models.Monkey.update(
@@ -124,7 +124,7 @@ app.put('/monkeys/:id', function(req, res) {
         .catch((err) => {
             res.json(err)
         })
-})
+});
 
 app.delete('/monkeys/:id', function(req, res) {
     models.Monkey.destroy({
@@ -138,7 +138,7 @@ app.delete('/monkeys/:id', function(req, res) {
         .catch((err) => {
             res.json(err)
         })
-})
+});
 
 // Synchronize models
 models.sequelize.sync().then(function() {

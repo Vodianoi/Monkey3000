@@ -1,8 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     var Monkey =  sequelize.define('Monkey', {
         name: DataTypes.STRING,
-        taille: DataTypes.INTEGER,
-        enclos: DataTypes.INTEGER
+        taille: DataTypes.INTEGER
     });
 
     Monkey.associate = function (models) {
