@@ -140,6 +140,18 @@ app.delete('/monkeys/:id', function(req, res) {
         })
 });
 
+
+
+app.param(['name'], (req, res, next, name) => {
+    req.name = name;
+    next();
+});
+
+app.param(['id'], (req, res, next, id) => {
+    req.id = id;
+    next();
+});
+
 // Synchronize models
 models.sequelize.sync().then(function() {
     /**
@@ -147,7 +159,7 @@ models.sequelize.sync().then(function() {
      *
      * Listen only when database connection is sucessfull
      */
-    app.listen(8080, function() {
-        console.log('Express server listening on port 8080');
+    app.listen(process.env.PORT, function() {
+        console.log('Express server listening on port ' + process.env.PORT);
     });
 });
