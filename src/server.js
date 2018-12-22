@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const path = require("path");
 const app = express();
 const models = require('./models/index');
 // Decode json and x-www-form-urlencoded
@@ -21,8 +22,7 @@ app.set("views", path.join(__dirname, "views"));
 app.get('/', function (req, res) {
     models.User.findAll()
         .then((users) => {
-            //res.json(users)
-            res.render("Creationsinge")
+            res.json(users)
         })
 });
 
@@ -39,21 +39,23 @@ app.post('/', function (req, res) {
 app.get('/monkeys', function (req, res) {
     models.Monkey.findAll()
         .then((monkeys) => {
-            res.json(monkeys)
+            //res.json(monkeys)
+            res.render("createMonkey")
         })
         .catch((err) => {
             res.json(err)
         })
 });
 
+
+
 app.post('/monkeys', function (req, res) {
     models.Monkey.create({
         name: req.body.name,
-        taille: req.body.taille,
-        enclos: req.body.enclos
+        taille: req.body.taille
     })
         .then((monkey) => {
-            res.json(monkey);
+            res.render('displayMonkey')
         })
         .catch((err) => {
             res.json(err)
@@ -162,7 +164,7 @@ models.sequelize.sync().then(function () {
      *
      * Listen only when database connection is sucessfull
      */
-    app.listen(process.env.PORT, function () {
-        console.log('Express server listening on port ' + process.env.PORT);
+    app.listen(3000, function () {
+        console.log('Express server listening on port ' + 3000);
     });
 });
