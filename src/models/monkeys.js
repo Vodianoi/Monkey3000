@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         });
     };
 
-    module.exports.getMonkeyById = function(id, callback){
-        Monkey.findById(id, callback);
-    };
+    // module.exports.getMonkeyById = function(id, callback){
+    //     Monkey.findById(id, callback);
+    // };
 
     return Monkey;
 
