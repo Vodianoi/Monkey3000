@@ -1,0 +1,15 @@
+body
+	h4 Liste des enclos :
+	ul
+		p Nom ID
+		for enclos in Enclos
+			li #{enclos.name}  #{enclos.id}  
+				br
+				a.button(href="/updateEnclos/"+enclos.id) Modifier
+				br
+				a.button(href="/enclos/delete/"+enclos.id) Supprimer
+				br 
+				br
+				
+	
+a(href="/") Retour Menu

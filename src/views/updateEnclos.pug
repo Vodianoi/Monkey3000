@@ -1,0 +1,7 @@
+body
+  form(action='/enclos/update/' + id, method='POST')
+    p
+      | name:
+      input(type='text', name='name', value='')
+    input(type='submit', value='Submit')
+  a(href="/") Retour Menu

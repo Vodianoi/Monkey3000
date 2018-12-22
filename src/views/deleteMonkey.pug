@@ -1,0 +1,7 @@
+body
+        form(action='/monkeys/'+monkey.id, method='DELETE')
+            li Nom : #{monkey.name}
+            li Enclos : #{monkey.enclosure_name}
+            input(type='submit', value='Supprimer ce singe')
+			
+  a(href="/") Retour Menu

@@ -1,0 +1,14 @@
+body
+	h4 Liste des singes :
+	ul
+		p Nom Enclos ID
+		for monkey in Monkeys
+			li #{monkey.name} #{monkey.taille}   #{monkey.id}   #{monkey.EncloID} 
+				br
+				a.button(href="/updateMonkey/"+monkey.id) Modifier
+				br
+				a.button(href="/monkeys/delete/"+monkey.id) Supprimer
+				br 
+				br
+				
+a(href="/") Retour Menu

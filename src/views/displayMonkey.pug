@@ -1,8 +1,10 @@
-body
-  form(action='/monkeys', method='POST')
-    p
-      | name:
-      input(type='text', name='name', value='')
-      |          taille:
-      input(type='text', name='taille', value='')
-    input(type='submit', value='Submit')
+html
+    body
+        h1 Singe :
+        p Nom : #{name}
+        p Taille : #{taille}
+        p Enclos : #{EncloId}
+        p ID : #{id}
+		
+		
+    a(href="/") Retour Menu

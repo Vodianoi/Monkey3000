@@ -1,5 +1,5 @@
 body
-  form(action='/monkeys', method='POST')
+  form(action='/monkeys/update/' + id, method='POST')
     p
       | name:
       input(type='text', name='name', value='')
@@ -8,6 +8,4 @@ body
       | Enclos:
       input(type='text', name='EncloId', value='')
     input(type='submit', value='Submit')
-	
-	
   a(href="/") Retour Menu

@@ -8,14 +8,12 @@ module.exports = (sequelize, DataTypes) => {
         models.Monkey.belongsTo(models.Enclos, {
             onDelete: "CASCADE",
             foreignKey: {
+                name: 'EncloId',
                 allowNull: false
             }
         });
     };
 
-    // module.exports.getMonkeyById = function(id, callback){
-    //     Monkey.findById(id, callback);
-    // };
 
     return Monkey;
 

@@ -18,29 +18,18 @@ app.use(morgan('short'));
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
+
 // Get all the users defined
-app.get('/', function (req, res) {
-    models.User.findAll()
-        .then((users) => {
-            res.json(users)
-        })
+app.get('/', (req, res) => {
+    res.render('index')
 });
 
-// Add a new user to the database
-app.post('/', function (req, res) {
-    models.User.create({
-        username: req.body.username
-    })
-        .then(() => {
-            res.send('User added !')
-        })
-});
 
-app.get('/monkeys', function (req, res) {
+app.get('/monkeys', (req, res) => {
     models.Monkey.findAll()
         .then((monkeys) => {
             //res.json(monkeys)
-            res.render("createMonkey")
+            res.render("displayMonkeys", {Monkeys: monkeys})
         })
         .catch((err) => {
             res.json(err)
@@ -48,21 +37,28 @@ app.get('/monkeys', function (req, res) {
 });
 
 
+app.get('/createMonkey', (req, res) => {
+    res.render('createMonkey')
+});
 
-app.post('/monkeys', function (req, res) {
+
+app.post('/monkeys', (req, res) => {
     models.Monkey.create({
         name: req.body.name,
-        taille: req.body.taille
+        taille: req.body.taille,
+        EncloId: req.body.EncloId
     })
         .then((monkey) => {
-            res.render('displayMonkey')
+            res.render('monkeyCreated', {
+                name: req.body.name
+            })
         })
         .catch((err) => {
             res.json(err)
         })
 });
 
-app.put('/monkeys', function (req, res) {
+app.put('/monkeys', (req, res) => {
     const promises = [];
 
     req.body.mutations
@@ -90,7 +86,7 @@ app.put('/monkeys', function (req, res) {
         })
 });
 
-app.delete('/monkeys', function (req, res) {
+app.delete('/monkeys', (req, res) => {
     models.Monkey.destroy({
         where: {
             id: req.body.ids
@@ -104,7 +100,80 @@ app.delete('/monkeys', function (req, res) {
         })
 });
 
-app.get('/monkeys/:id', function (req, res) {
+
+app.get('/enclos', (req, res) => {
+    models.Enclos.findAll()
+        .then((enclos) => {
+            //res.json(enclos)
+            res.render("displayEnclos",{Enclos: enclos})
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+app.get('/createEnclos', (req, res) => {
+    res.render("createEnclos")
+});
+
+
+app.post('/enclos', (req, res) => {
+    models.Enclos.create({
+        name: req.body.name,
+        taille: req.body.taille,
+    })
+        .then((enclo) => {
+            res.render('enclosCreated',{name: req.body.name})
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+app.put('/enclos', (req, res) => {
+    const promises = [];
+
+    req.body.mutations
+        .forEach((item) => {
+
+            promises.push(
+                models.Enclos.update(
+                    item.data,
+                    {
+                        where: {
+                            id: item.id
+                        }
+                    }
+                )
+            )
+
+        });
+
+    Promise.all(promises)
+        .then((response) => {
+            res.json(response);
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+app.delete('/enclos', (req, res) => {
+    models.Enclos.destroy({
+        where: {
+            id: req.body.ids
+        }
+    })
+        .then((response) => {
+            res.json(response)
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+
+app.get('/monkeys/:id', (req, res)  =>{
     models.Monkey.findOne({
         id: req.params.id
     })
@@ -116,8 +185,80 @@ app.get('/monkeys/:id', function (req, res) {
         })
 });
 
-app.put('/monkeys/:id', function (req, res) {
+app.get('/updateMonkey/:id', (req, res)=> {
+    res.render('updateMonkey',{id: req.params.id})
+});
+
+
+
+app.post('/monkeys/update/:id', (req, res) =>{
     models.Monkey.update(
+        req.body,
+        {
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((monkey) => {
+            res.render('monkeyUpdated', {name: monkey.name})
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+app.get('/monkeys/delete/:id', (req, res)  =>{
+    models.Monkey.destroy({
+        where: {
+            id: req.params.id
+        }
+    })
+        .then((response) => {
+            res.render('monkeyDeleted', {name: response.name});
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+app.get('/updateEnclos/:id', (req, res) =>{
+    res.render('updateEnclos',{id: req.params.id})
+});
+
+
+app.post('/enclos/update/:id', (req, res) => {
+    models.Enclos.update(
+        req.body,
+        {
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((enclos) => {
+            res.render('enclosUpdated', {name: enclos.name})
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+
+
+
+app.get('/enclos/:id', (req, res) => {
+    models.Enclos.findOne({
+        id: req.params.id
+    })
+        .then((enclos) => {
+            res.json(enclos)
+        })
+        .catch((err) => {
+            res.json(err)
+        })
+});
+
+app.get('/enclos/update/:id', (req, res) => {
+    models.Enclos.update(
         req.body,
         {
             where: {
@@ -132,14 +273,14 @@ app.put('/monkeys/:id', function (req, res) {
         })
 });
 
-app.delete('/monkeys/:id', function (req, res) {
-    models.Monkey.destroy({
+app.get('/enclos/delete/:id', (req, res) => {
+    models.Enclos.destroy({
         where: {
             id: req.params.id
         }
     })
-        .then((response) => {
-            res.json(response);
+        .then((enclos) => {
+            res.render('enclosDeleted', {name: enclos.name});
         })
         .catch((err) => {
             res.json(err)
@@ -158,13 +299,13 @@ app.param(['id'], (req, res, next, id) => {
 });
 
 // Synchronize models
-models.sequelize.sync().then(function () {
+models.sequelize.sync().then(() => {
     /**
      * Listen on provided port, on all network interfaces.
      *
      * Listen only when database connection is sucessfull
      */
-    app.listen(3000, function () {
+    app.listen(3000, () => {
         console.log('Express server listening on port ' + 3000);
     });
 });
